@@ -16,63 +16,63 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <top>
-      <VBox BorderPane.alignment="CENTER">
-         <children>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-      </VBox>
-   </top>
-   <bottom>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Ready" />
-         </children>
-      </HBox>
-   </bottom>
-   <left>
-      <TreeView minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </left>
-   <center>
-      <TabPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab text="Untitled Tab 1">
-            <content>
-              <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="325.0">
-                     <children>
-                        <TableView layoutX="100.0" layoutY="21.0" prefHeight="429.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
-                        </TableView>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Untitled Tab 2">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
-   </center>
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Close" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </VBox>
+    </top>
+    <bottom>
+        <HBox BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="rdyLabel" text="Ready" />
+            </children>
+        </HBox>
+    </bottom>
+    <left>
+        <TreeView minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </left>
+    <center>
+        <TabPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab text="Untitled Tab 1">
+                    <content>
+                        <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="325.0">
+                            <children>
+                                <TableView layoutX="100.0" layoutY="21.0" prefHeight="429.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn prefWidth="75.0" text="C1" />
+                                        <TableColumn prefWidth="75.0" text="C2" />
+                                    </columns>
+                                </TableView>
+                            </children></AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Untitled Tab 2">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
 </BorderPane>
