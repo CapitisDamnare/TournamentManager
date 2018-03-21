@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,13 +11,13 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private Label rdyLabel;
-
-    @FXML
     private MenuBar menuBar;
 
     @FXML
     private Button btnMode;
+
+    @FXML
+    private MenuItem btnMenuNew;
 
     @FXML
     private Button btnGroupSettings;
@@ -33,16 +32,22 @@ public class Controller implements Initializable {
     private TabPane tabPane;
 
     @FXML
-    private TreeView<?> menuTree;
+    private TreeView<String> menuTree;
+
+    @FXML
+    private MenuItem btnMenuDelete;
+
+    private TreeItem<String> rootItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("Load data");
-        setRdyLabel("jup");
+        rootItem = new TreeItem<>("Tournaments");
+        rootItem.setExpanded(true);
+        menuTree.setRoot(rootItem);
     }
 
     public void setRdyLabel(String text) {
-        rdyLabel.setText(text);
+        statusLabel.setText(text);
     }
 
     private void setExampleData() {
@@ -57,6 +62,20 @@ public class Controller implements Initializable {
 
     @FXML
     void btnModeOnClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnMenuNewOnCLick(ActionEvent event) {
+        TreeItem<String> tournItem = new TreeItem<>("Torunament1");
+        TreeItem<String> settingsItem = new TreeItem<>("Settings");
+        TreeItem<String> vorrundeItem = new TreeItem<>("Vorrunde");
+        tournItem.getChildren().addAll(settingsItem, vorrundeItem);
+        rootItem.getChildren().add(tournItem);
+    }
+
+    @FXML
+    void btnMenuDeleteOnClick(ActionEvent event) {
 
     }
 }

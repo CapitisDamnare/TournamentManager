@@ -24,12 +24,12 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="Datei">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Neu" />
+                                <MenuItem fx:id="btnMenuNew" mnemonicParsing="false" onAction="#btnMenuNewOnCLick" text="Neu" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Bearbeiten">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Delete" />
+                                <MenuItem fx:id="btnMenuDelete" mnemonicParsing="false" onAction="#btnMenuDeleteOnClick" text="Delete" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Hilfe">
@@ -50,7 +50,7 @@
         </HBox>
     </bottom>
     <left>
-        <TreeView fx:id="menuTree" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        <TreeView fx:id="menuTree" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
     </left>
     <center>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
