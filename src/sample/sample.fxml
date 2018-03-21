@@ -58,37 +58,39 @@
                 <Tab text="Einstellungen">
                     <content>
                         <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="325.0">
-                     <children>
-                        <VBox alignment="TOP_CENTER" layoutX="23.0" layoutY="29.0" prefHeight="429.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label layoutX="29.0" layoutY="29.0" prefHeight="27.0" prefWidth="55.0" text="Gruppen" />
-                              <Button fx:id="btnGroupSettings" layoutX="23.0" layoutY="56.0" mnemonicParsing="false" onAction="#btnGroupSettingsOnClick" text="Gruppen Einstellungen" />
-                              <Button fx:id="btnMode" layoutX="50.0" layoutY="104.0" mnemonicParsing="false" onAction="#btnModeOnClick" text="Modus" />
-                           </children>
-                        </VBox>
-                     </children></AnchorPane>
+                            <children>
+                                <VBox alignment="TOP_CENTER" layoutX="23.0" layoutY="29.0" prefHeight="429.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <Label layoutX="29.0" layoutY="29.0" prefHeight="27.0" prefWidth="55.0" text="Gruppen" />
+                                        <Button fx:id="btnGroupSettings" layoutX="23.0" layoutY="56.0" mnemonicParsing="false" onAction="#btnGroupSettingsOnClick" text="Gruppen Einstellungen" />
+                                        <Button fx:id="btnMode" layoutX="50.0" layoutY="104.0" mnemonicParsing="false" onAction="#btnModeOnClick" text="Modus" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
-            <Tab text="Vorrunde">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                                <TableView fx:id="vrTableView" editable="true" prefHeight="429.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Tab text="Vorrunde">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <TableView fx:id="vrTableView" editable="true" prefHeight="429.0" prefWidth="400.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
+                                        <TableColumn prefWidth="75.0" text="Num" />
                                         <TableColumn prefWidth="95.0" text="Heim" />
-                              <TableColumn minWidth="0.0" prefWidth="31.0" text="-" />
-                              <TableColumn prefWidth="20.0" text=":" />
-                              <TableColumn prefWidth="46.0" text="-" />
+                                        <TableColumn minWidth="0.0" prefWidth="31.0" text="-" />
+                                        <TableColumn prefWidth="20.0" text=":" />
+                                        <TableColumn prefWidth="46.0" text="-" />
                                         <TableColumn minWidth="0.0" prefWidth="143.0" text="Gast" />
                                     </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
                                 </TableView>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
                 <Tab text="Auswertung">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
