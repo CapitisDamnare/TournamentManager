@@ -28,9 +28,6 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(600);
         primaryStage.setMinHeight(600);
-
-        Person person = new Person(controller);
-        person.setLabel("fuck");
     }
 
 

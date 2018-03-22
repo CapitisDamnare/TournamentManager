@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -61,6 +63,7 @@ public class Controller implements Initializable {
 
         menuTree.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
 
+
         ObservableList<Game> games = FXCollections.observableArrayList(
                 new Game("1", "10:00", "Home Team A", "Guest Team B"),
                 new Game("2", "10:00", "Home Team C", "Guest Team D"),
@@ -76,7 +79,7 @@ public class Controller implements Initializable {
         TableColumn fifth = columns.get(4);
         TableColumn sixt = columns.get(5);
 
-        first.setCellValueFactory(new PropertyValueFactory<Game, String>("gameNumber"));
+        first.setCellFactory(TextFieldTableCell.<Game>forTableColumn());
         first.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<Game, String>>() {
                     @Override
@@ -88,6 +91,7 @@ public class Controller implements Initializable {
                     }
                 }
         );
+        first.setCellValueFactory(new PropertyValueFactory<Game, String>("gameNumber"));
         second.setCellValueFactory(new PropertyValueFactory<Game, String>("homeTeam"));
         third.setCellValueFactory(new PropertyValueFactory<Game, String>("homeTeamScore"));
         fourth.setCellValueFactory(new PropertyValueFactory<Game, String>("versus"));
