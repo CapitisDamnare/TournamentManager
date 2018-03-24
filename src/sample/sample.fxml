@@ -76,11 +76,11 @@
                             <children>
                                 <TableView fx:id="vrTableView" editable="true" prefHeight="429.0" prefWidth="400.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="Num" />
+                                        <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Num" />
                                         <TableColumn prefWidth="95.0" text="Heim" />
-                                        <TableColumn minWidth="0.0" prefWidth="31.0" text="-" />
-                                        <TableColumn prefWidth="20.0" text=":" />
-                                        <TableColumn prefWidth="46.0" text="-" />
+                                        <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="-" />
+                                        <TableColumn maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text=":" />
+                                        <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="-" />
                                         <TableColumn minWidth="0.0" prefWidth="143.0" text="Gast" />
                                     </columns>
                                     <columnResizePolicy>
