@@ -1,4 +1,4 @@
-package sample;
+package tapsi.logic;
 
 public class Game {
 

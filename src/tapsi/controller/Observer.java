@@ -1,4 +1,6 @@
-package sample;
+package tapsi.controller;
+
+import tapsi.controller.ControllerInterface;
 
 import java.util.ArrayList;
 import java.util.List;

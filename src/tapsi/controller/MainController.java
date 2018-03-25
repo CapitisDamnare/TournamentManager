@@ -1,4 +1,4 @@
-package sample;
+package tapsi.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,11 +15,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import tapsi.logic.Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
 
     @FXML
     private MenuBar menuBar;
@@ -54,25 +55,18 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        rootItem = new TreeItem<>("Tournaments");
-        rootItem.setExpanded(true);
-        menuTree.setRoot(rootItem);
+        setupTreeView();
+        setupTableView();
+        createSampleData();
+    }
 
+    /**
+     * Creates a custom editable table view. Links the table columns to the Game class.
+     * Creates and handles the drag an drop event
+     */
+    private void setupTableView() {
 
-        EventHandler<MouseEvent> mouseEventHandle = (MouseEvent event) -> {
-            handleMouseClicked(event);
-        };
-
-        menuTree.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
-
-
-        ObservableList<Game> games = FXCollections.observableArrayList(
-                new Game("1", "10:00", "Home Team A", "Guest Team B"),
-                new Game("2", "10:00", "Home Team C", "Guest Team D"),
-                new Game("3", "10:00", "Home Team E", "Guest Team F"),
-                new Game("4", "10:00", "Home Team G", "Guest Team H")
-        );
-
+        // Todo: Need an additional column for the time
         ObservableList<? extends TableColumn<?, ?>> columns = vrTableView.getColumns();
         TableColumn first = columns.get(0);
         TableColumn second = columns.get(1);
@@ -88,6 +82,7 @@ public class Controller implements Initializable {
                     }
                 };
 
+        // Todo: setCellFactory should call cellFactory!
         third.setCellFactory(TextFieldTableCell.<Game>forTableColumn());
         third.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<Game, String>>() {
@@ -119,6 +114,7 @@ public class Controller implements Initializable {
         fifth.setCellValueFactory(new PropertyValueFactory<Game, String>("guestTeamScore"));
         sixth.setCellValueFactory(new PropertyValueFactory<Game, String>("guestTeam"));
 
+        // Drag and Drop implementation
         vrTableView.setRowFactory(tv -> {
             TableRow<Game> row = new TableRow<>();
 
@@ -175,93 +171,14 @@ public class Controller implements Initializable {
         fourth.setStyle("-fx-alignment: CENTER;");
         fifth.setStyle("-fx-alignment: CENTER;");
         sixth.setStyle("-fx-alignment: CENTER-RIGHT;");
-
-        vrTableView.setItems(games);
-
     }
 
-    public void setRdyLabel(String text) {
-        statusLabel.setText(text);
-    }
-
-    private void setExampleData() {
-
-    }
-
-
-    @FXML
-    void btnGroupSettingsOnClick(ActionEvent event) {
-        Observer.btnGroupSettings();
-    }
-
-    @FXML
-    void btnModeOnClick(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnMenuNewOnCLick(ActionEvent event) {
-        TreeItem<String> tournItem = new TreeItem<>("Torunament1");
-        TreeItem<String> settingsItem = new TreeItem<>("Settings");
-        TreeItem<String> vorrundeItem = new TreeItem<>("Vorrunde");
-        tournItem.getChildren().addAll(settingsItem, vorrundeItem);
-        rootItem.getChildren().add(tournItem);
-    }
-
-    @FXML
-    void btnMenuDeleteOnClick(ActionEvent event) {
-
-    }
-
-    private void handleMouseClicked(MouseEvent event) {
-        if (contextMenu != null)
-            contextMenu.hide();
-        Node node = event.getPickResult().getIntersectedNode();
-        // Accept clicks only on node cells, and not on empty spaces of the TreeView
-        if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
-            String name = (String) ((TreeItem) menuTree.getSelectionModel().getSelectedItem()).getValue();
-
-            // Todo: Check if node has a parent
-            String parent = (String) ((TreeItem) menuTree.getSelectionModel().getSelectedItem().getParent()).getValue();
-            System.out.println("Node click: " + name + "\n Button: " + event.getButton() + "\n Parent: " + parent);
-
-            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                switch (name) {
-                    case "Vorrunde":
-                        selectionModel.select(1);
-                        break;
-                    case "Settings":
-                        selectionModel.select(0);
-                        break;
-                }
-            }
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                switch (name) {
-                    case "Vorrunde":
-                        contextMenu = new ContextMenu();
-                        MenuItem Ventry1 = new MenuItem("Ganz");
-//                        entry1.setOnAction(ae -> ...);
-                        MenuItem Ventry2 = new MenuItem("was anderes");
-//                        entry2.setOnAction(ae -> ...);
-                        contextMenu.getItems().addAll(Ventry1, Ventry2);
-                        contextMenu.show(menuTree, event.getScreenX(), event.getScreenY());
-                        break;
-                    case "Settings":
-                        contextMenu = new ContextMenu();
-                        MenuItem Sentry1 = new MenuItem("Test with Icon");
-//                        entry1.setOnAction(ae -> ...);
-                        MenuItem Sentry2 = new MenuItem("Test without Icon");
-//                        entry2.setOnAction(ae -> ...);
-                        contextMenu.getItems().addAll(Sentry1, Sentry2);
-                        contextMenu.show(menuTree, event.getScreenX(), event.getScreenY());
-                        break;
-                }
-            }
-        }
-    }
-
+    /**
+     * Custom class which extends from TableCell and handles the custom editing function.
+     * ESC for cancel and restore old values.
+     * ENTER accepts the input
+     * TAB accepts the input and should focus the next row
+     */
     class EditingCell extends TableCell<Game, String> {
 
         private TextField textField;
@@ -329,10 +246,126 @@ public class Controller implements Initializable {
                     setGraphic(null);
                 }
             });
+            // Todo: Implement TAB should focus the next row
         }
 
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
         }
     }
+
+    private void setupTreeView() {
+        rootItem = new TreeItem<>("Tournaments");
+        rootItem.setExpanded(true);
+        menuTree.setRoot(rootItem);
+
+        EventHandler<MouseEvent> mouseEventHandle = (MouseEvent event) -> {
+            handleMouseClicked(event);
+        };
+
+        menuTree.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
+    }
+
+    /**
+     * Creates the context menu and handles click events
+     *
+     * @param event {@link MouseEvent}
+     */
+    private void handleMouseClicked(MouseEvent event) {
+        if (contextMenu != null)
+            contextMenu.hide();
+        Node node = event.getPickResult().getIntersectedNode();
+        // Accept clicks only on node cells, and not on empty spaces of the TreeView
+        if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
+            String name = (String) ((TreeItem) menuTree.getSelectionModel().getSelectedItem()).getValue();
+
+            // Todo: Check if node has a parent
+            String parent = (String) ((TreeItem) menuTree.getSelectionModel().getSelectedItem().getParent()).getValue();
+
+            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                switch (name) {
+                    case "Vorrunde":
+                        selectionModel.select(1);
+                        break;
+                    case "Settings":
+                        selectionModel.select(0);
+                        break;
+                }
+            }
+
+            // Todo: Set method for contextMenu action
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                switch (name) {
+                    case "Vorrunde":
+                        contextMenu = new ContextMenu();
+                        MenuItem Ventry1 = new MenuItem("Ganz");
+//                        entry1.setOnAction(ae -> ...);
+                        MenuItem Ventry2 = new MenuItem("was anderes");
+//                        entry2.setOnAction(ae -> ...);
+                        contextMenu.getItems().addAll(Ventry1, Ventry2);
+                        contextMenu.show(menuTree, event.getScreenX(), event.getScreenY());
+                        break;
+                    case "Settings":
+                        contextMenu = new ContextMenu();
+                        MenuItem Sentry1 = new MenuItem("Test with Icon");
+//                        entry1.setOnAction(ae -> ...);
+                        MenuItem Sentry2 = new MenuItem("Test without Icon");
+//                        entry2.setOnAction(ae -> ...);
+                        contextMenu.getItems().addAll(Sentry1, Sentry2);
+                        contextMenu.show(menuTree, event.getScreenX(), event.getScreenY());
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Populates the vrTableView with sample data
+     */
+    private void createSampleData() {
+        ObservableList<Game> games = FXCollections.observableArrayList(
+                new Game("1", "10:00", "Home Team A", "Guest Team B"),
+                new Game("2", "10:00", "Home Team C", "Guest Team D"),
+                new Game("3", "10:00", "Home Team E", "Guest Team F"),
+                new Game("4", "10:00", "Home Team G", "Guest Team H")
+        );
+        vrTableView.setItems(games);
+    }
+
+    /**
+     * Triggers the btnGroupSettings event
+     *
+     * @param event {@link ActionEvent}
+     */
+    @FXML
+    void btnGroupSettingsOnClick(ActionEvent event) {
+        Observer.btnGroupSettings();
+    }
+
+    @FXML
+    void btnModeOnClick(ActionEvent event) {
+
+    }
+
+    /**
+     * Creates a new tournament project with all TreeItem children
+     *
+     * @param event {@link ActionEvent}
+     */
+    @FXML
+    void btnMenuNewOnCLick(ActionEvent event) {
+        TreeItem<String> tournItem = new TreeItem<>("Torunament1");
+        TreeItem<String> settingsItem = new TreeItem<>("Settings");
+        TreeItem<String> vorrundeItem = new TreeItem<>("Vorrunde");
+        tournItem.getChildren().addAll(settingsItem, vorrundeItem);
+        rootItem.getChildren().add(tournItem);
+    }
+
+    @FXML
+    void btnMenuDeleteOnClick(ActionEvent event) {
+
+    }
+
 }
