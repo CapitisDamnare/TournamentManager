@@ -83,7 +83,7 @@ public class MainController implements Initializable {
                 };
 
         // Todo: setCellFactory should call cellFactory!
-        third.setCellFactory(TextFieldTableCell.<Game>forTableColumn());
+        third.setCellFactory(cellFactory);
         third.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<Game, String>>() {
                     @Override
@@ -140,20 +140,33 @@ public class MainController implements Initializable {
                 }
             });
 
+            row.setOnDragEntered(event -> {
+                if (!row.isEmpty()) {
+                    row.setStyle("-fx-control-inner-background: derive(palegreen, 50%);");
+                } else {
+                    row.setStyle("-fx-control-inner-background: derive(red, 50%);");
+                }
+
+                event.consume();
+            });
+
+            row.setOnDragExited(event -> {
+                /* mouse moved away, remove the graphical cues */
+                row.setStyle("-fx-control-inner-background: derive(-fx-base,80%);");
+                event.consume();
+            });
+
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Game draggedPerson = vrTableView.getItems().remove(draggedIndex);
 
-                    int dropIndex;
+                    int dropIndex = draggedIndex;
 
-                    if (row.isEmpty()) {
-                        dropIndex = vrTableView.getItems().size();
-                    } else {
+                    if (!row.isEmpty()) {
                         dropIndex = row.getIndex();
                     }
-
                     vrTableView.getItems().add(dropIndex, draggedPerson);
 
                     event.setDropCompleted(true);
@@ -161,7 +174,6 @@ public class MainController implements Initializable {
                     event.consume();
                 }
             });
-
             return row;
         });
 
