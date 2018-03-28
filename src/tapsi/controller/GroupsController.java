@@ -3,26 +3,49 @@ package tapsi.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tapsi.Main;
 import tapsi.logic.Team;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class GroupsController implements Initializable, ControllerInterface {
 
     @FXML
+    private HBox hBoxGroups;
+
+    @FXML
     private ListView<String> groupListView;
+
+    @FXML
+    private MenuButton groupButton;
+
+    @FXML
+    private MenuItem groupBtnItem1;
+
+    @FXML
+    private MenuItem groupBtnItem2;
 
     private Stage stage;
     ObservableList<String> group;
     private ContextMenu contextMenu;
+    private int groupCount = 1;
+    private final int MAX_GROUP_COUNT = 6;
+
+    VBox vBox = new VBox();
+    Label label = new Label("Gruppe B");
+    ListView<String> listView = new ListView<>();
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -38,6 +61,7 @@ public class GroupsController implements Initializable, ControllerInterface {
     public void initialize(URL location, ResourceBundle resources) {
         setupListView();
         exampleData();
+        setupGroupButton();
     }
 
     private void setupListView() {
@@ -118,9 +142,11 @@ public class GroupsController implements Initializable, ControllerInterface {
             contextMenu = new ContextMenu();
             MenuItem menuItem = new MenuItem("Team löschen");
             menuItem.setOnAction(ae -> deleteItem(groupListView.getSelectionModel().getSelectedIndex()));
-            MenuItem menuItem1 = new MenuItem("Team hinzufügen");
+            MenuItem menuItem1 = new MenuItem("Team davor hinzufügen");
             menuItem1.setOnAction(ae -> addItem(groupListView.getSelectionModel().getSelectedIndex()));
-            contextMenu.getItems().addAll(menuItem, menuItem1);
+            MenuItem menuItem2 = new MenuItem("Team danach hinzufügen");
+            menuItem2.setOnAction(event1 -> addItem(groupListView.getSelectionModel().getSelectedIndex() + 1));
+            contextMenu.getItems().addAll(menuItem, menuItem1, menuItem2);
             contextMenu.show(groupListView, event.getScreenX(), event.getScreenY());
         }
     }
@@ -131,7 +157,10 @@ public class GroupsController implements Initializable, ControllerInterface {
 
     private void addItem(int index) {
         group.add(index, "Name");
+        groupListView.refresh();
         groupListView.getSelectionModel().select(index);
+        groupListView.layout();
+        groupListView.edit(index);
     }
 
     private void exampleData() {
@@ -145,7 +174,7 @@ public class GroupsController implements Initializable, ControllerInterface {
         groupListView.setItems(group);
     }
 
-    public class TeamListCell extends ListCell<String> {
+    private class TeamListCell extends ListCell<String> {
         private final TextField textField = new TextField();
 
         public TeamListCell() {
@@ -153,6 +182,8 @@ public class GroupsController implements Initializable, ControllerInterface {
                 if (e.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 } else if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.TAB) {
+                    if (groupListView.getSelectionModel().getSelectedItem().equals(""))
+                        deleteItem(getIndex());
                     groupListView.getSelectionModel().select(getIndex() + 1);
                 }
             });
@@ -197,6 +228,34 @@ public class GroupsController implements Initializable, ControllerInterface {
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         }
     }
+
+    private void setupGroupButton() {
+        vBox.getChildren().addAll(label, listView);
+        List<VBox> vBoxList = new ArrayList<>();
+
+        groupBtnItem1.setOnAction(event1 -> {
+            addGroupList(1);
+        });
+
+        groupBtnItem2.setOnAction(event1 -> {
+           addGroupList(2);
+        });
+    }
+
+    private void addGroupList (int count) {
+        if (groupCount == count || MAX_GROUP_COUNT == count)
+            return;
+        else if (groupCount < count) {
+            hBoxGroups.getChildren().add(vBox);
+            groupCount = count;
+
+        } else {
+            System.out.println("Todo. remove Grouplist!");
+            hBoxGroups.getChildren().remove(vBox);
+            groupCount = count;
+        }
+    }
+
 
     @FXML
     void btnOkOnClicked(ActionEvent event) {
