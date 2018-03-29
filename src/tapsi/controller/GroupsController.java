@@ -16,10 +16,7 @@ import tapsi.Main;
 import tapsi.logic.Team;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GroupsController implements Initializable, ControllerInterface {
 
@@ -39,10 +36,11 @@ public class GroupsController implements Initializable, ControllerInterface {
     private MenuItem groupBtnItem2;
 
     private Stage stage;
-    ObservableList<String> group;
+    private ObservableList<String> group;
     private ContextMenu contextMenu;
-    private int groupCount = 1;
+    private int groupCount = 0;
     private final int MAX_GROUP_COUNT = 6;
+    private List<VBox> vBoxList;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -227,36 +225,52 @@ public class GroupsController implements Initializable, ControllerInterface {
     }
 
     private void setupGroupButton() {
-
         List<VBox> vBoxList = new ArrayList<>();
-        List<String> names = Arrays.asList("Gruppe A","Gruppe B","Gruppe C","Gruppe D","Gruppe E","Gruppe F");
+        List<String> names = Arrays.asList("Gruppe B","Gruppe C","Gruppe D","Gruppe E","Gruppe F");
 
-        VBox vBox = new VBox();
-        Label label = new Label("Gruppe B");
-        ListView<String> listView = new ListView<>();
-        vBox.getChildren().addAll(label, listView);
+        ListIterator<String> nameListIterator= names.listIterator();
+
+        while(nameListIterator.hasNext()) {
+            VBox vBox = new VBox();
+            Label label = new Label(nameListIterator.next());
+            ListView<String> listView = new ListView<>();
+            vBox.getChildren().addAll(label, listView);
+
+            vBoxList.add(vBox);
+        }
+        System.out.println(vBoxList.size());
 
         groupBtnItem1.setOnAction(event1 -> {
-            addGroupList(1);
+            addGroupList(0);
         });
 
         groupBtnItem2.setOnAction(event1 -> {
-           addGroupList(2);
+           addGroupList(1);
         });
     }
 
     private void addGroupList (int count) {
         if (groupCount == count || MAX_GROUP_COUNT == count)
             return;
-        else if (groupCount < count) {
-            hBoxGroups.getChildren().add(vBox);
-            groupCount = count;
 
-        } else {
-            System.out.println("Todo. remove Grouplist!");
-            hBoxGroups.getChildren().remove(vBox);
-            groupCount = count;
+        System.out.println("Size: " + hBoxGroups.getChildren().size());
+        //hBoxGroups.getChildren().removeAll();
+        System.out.println("Size: " + hBoxGroups.getChildren().size());
+
+        for(int iter = 0; iter < count; iter ++) {
+            hBoxGroups.getChildren().add(vBoxList.get(iter));
         }
+        System.out.println("Size: " + hBoxGroups.getChildren().size());
+        groupCount = count;
+//        else if (groupCount < count) {
+//            hBoxGroups.getChildren().add(vBox);
+//            groupCount = count;
+//
+//        } else {
+//            System.out.println("Todo. remove Grouplist!");
+//            hBoxGroups.getChildren().remove(vBox);
+//            groupCount = count;
+//        }
     }
 
 
