@@ -17,6 +17,7 @@ import tapsi.logic.Team;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,10 +43,6 @@ public class GroupsController implements Initializable, ControllerInterface {
     private ContextMenu contextMenu;
     private int groupCount = 1;
     private final int MAX_GROUP_COUNT = 6;
-
-    VBox vBox = new VBox();
-    Label label = new Label("Gruppe B");
-    ListView<String> listView = new ListView<>();
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -230,8 +227,14 @@ public class GroupsController implements Initializable, ControllerInterface {
     }
 
     private void setupGroupButton() {
-        vBox.getChildren().addAll(label, listView);
+
         List<VBox> vBoxList = new ArrayList<>();
+        List<String> names = Arrays.asList("Gruppe A","Gruppe B","Gruppe C","Gruppe D","Gruppe E","Gruppe F");
+
+        VBox vBox = new VBox();
+        Label label = new Label("Gruppe B");
+        ListView<String> listView = new ListView<>();
+        vBox.getChildren().addAll(label, listView);
 
         groupBtnItem1.setOnAction(event1 -> {
             addGroupList(1);
