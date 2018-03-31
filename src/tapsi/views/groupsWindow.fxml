@@ -22,14 +22,18 @@
               <items>
                 <MenuItem fx:id="groupBtnItem1" mnemonicParsing="false" text="1" />
                 <MenuItem fx:id="groupBtnItem2" mnemonicParsing="false" text="2" />
+                  <MenuItem fx:id="groupBtnItem3" mnemonicParsing="false" text="3" />
+                  <MenuItem fx:id="groupBtnItem4" mnemonicParsing="false" text="4" />
+                  <MenuItem fx:id="groupBtnItem5" mnemonicParsing="false" text="5" />
+                  <MenuItem fx:id="groupBtnItem6" mnemonicParsing="false" text="6" />
               </items>
             </MenuButton>
             <HBox fx:id="hBoxGroups" alignment="CENTER" prefHeight="377.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" spacing="5.0">
+                  <VBox fx:id="mainVBox" alignment="CENTER" spacing="5.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Gruppe A" textAlignment="CENTER" />
-                        <ListView fx:id="groupListView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="groupList0" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
