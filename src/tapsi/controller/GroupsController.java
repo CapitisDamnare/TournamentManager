@@ -89,7 +89,7 @@ public class GroupsController implements Initializable, ControllerInterface {
         groupList0.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
 
         vBoxList = new ArrayList<>();
-        List<String> names = Arrays.asList("Gruppe A", "Gruppe B", "Gruppe C", "Gruppe D", "Gruppe E", "Gruppe F");
+        List<String> names = Arrays.asList("Gruppe B", "Gruppe C", "Gruppe D", "Gruppe E", "Gruppe F");
         ListIterator<String> nameListIterator = names.listIterator();
 
         vBoxList.add(mainVBox);
