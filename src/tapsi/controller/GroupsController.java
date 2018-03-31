@@ -1,10 +1,8 @@
 package tapsi.controller;
 
-import com.sun.istack.internal.NotNull;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -55,13 +54,19 @@ public class GroupsController implements Initializable, ControllerInterface {
     private MenuItem groupBtnItem6;
 
     private Stage stage;
-    //private ObservableList<String> group;
-    private List<ObservableList<String>> groupsList = new ArrayList<>();
     private ContextMenu contextMenu;
+
     private int groupCount = 0;
     private final int MAX_GROUP_COUNT = 6;
     private List<VBox> vBoxList;
+    private List<ObservableList<String>> groupsList = new ArrayList<>();
 
+    /**
+     * Sets the Stage to the controller.
+     * The controller is now able to hide and show the stage.
+     *
+     * @param stage
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -74,11 +79,15 @@ public class GroupsController implements Initializable, ControllerInterface {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupListView();
         exampleData();
+        setupListView();
         setupGroupButton();
     }
 
+    /**
+     * Creates all group list views and sets up the event handlers. (Mouse Event, Key Event)
+     * Also binds the list views the observable lists.
+     */
     private void setupListView() {
 
         groupList0.setEditable(true);
@@ -95,13 +104,13 @@ public class GroupsController implements Initializable, ControllerInterface {
         vBoxList.add(mainVBox);
 
         while (nameListIterator.hasNext()) {
+            int index = nameListIterator.nextIndex() + 1;
             VBox vBox = new VBox();
             Label label = new Label(nameListIterator.next());
             ListView<String> listView = new ListView<>();
+            listView.setId("groupList" + String.valueOf(index));
 
-            ObservableList<String> group = FXCollections.observableArrayList(
-                    new Team("1. Team").getName()
-            );
+            ObservableList<String> group = FXCollections.observableArrayList();
             groupsList.add(group);
             listView.setItems(group);
 
@@ -112,6 +121,52 @@ public class GroupsController implements Initializable, ControllerInterface {
         }
     }
 
+    /**
+     * Sets the properties for the given nodes
+     *
+     * @param listView the current ListView
+     * @param vBox     the current vBox which holds the list view and the label
+     * @param label    the current label
+     */
+    private void setupListViewProperties(ListView<String> listView, VBox vBox, Label label) {
+        label.setAlignment(Pos.CENTER);
+
+        vBox.nodeOrientationProperty().setValue(NodeOrientation.INHERIT);
+        vBox.setMinWidth(Region.USE_COMPUTED_SIZE);
+        vBox.setMinHeight(Region.USE_COMPUTED_SIZE);
+        vBox.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        vBox.setMaxHeight(Region.USE_COMPUTED_SIZE);
+        vBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        vBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(5);
+        vBox.setVgrow(listView, Priority.ALWAYS);
+
+        listView.setEditable(true);
+        listView.nodeOrientationProperty().setValue(NodeOrientation.INHERIT);
+        listView.setMinWidth(Region.USE_COMPUTED_SIZE);
+        listView.setMinHeight(Region.USE_COMPUTED_SIZE);
+        listView.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        listView.setMaxHeight(Region.USE_COMPUTED_SIZE);
+        listView.setPrefWidth(200);
+        listView.setPrefHeight(200);
+
+        listView.setCellFactory(lv -> handleCellFactory(lv));
+
+        EventHandler<MouseEvent> mouseEventHandle = (MouseEvent event) -> {
+            handleMouseClicked(event);
+        };
+
+        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
+    }
+
+    /**
+     * Creates a new {@link TeamListCell} class which handles the edit handling.
+     * Also defines the drag and drop event.
+     *
+     * @param listView the current list view
+     * @return the customized TeamListCell
+     */
     private ListCell<String> handleCellFactory(ListView<String> listView) {
         ListCell<String> cell = new TeamListCell(listView);
 
@@ -172,6 +227,11 @@ public class GroupsController implements Initializable, ControllerInterface {
         return cell;
     }
 
+    /**
+     * Shows and links the context menu to the current cell in the list view
+     *
+     * @param event the current {@link MouseEvent}
+     */
     private void handleMouseClicked(MouseEvent event) {
         if (contextMenu != null)
             contextMenu.hide();
@@ -191,17 +251,31 @@ public class GroupsController implements Initializable, ControllerInterface {
         }
     }
 
+    /**
+     * Deletes the given row/cell of the list view
+     *
+     * @param listView the current list view which holds the row/cell
+     * @param index    the index of the current row/cell
+     */
     private void deleteItem(ListView<String> listView, int index) {
         int groupIndex = getIndexViewByID(listView.getId());
 
-        if (groupIndex != 0)
+        if (groupIndex != -1)
             groupsList.get(groupIndex).remove(index);
     }
 
+    /**
+     * Adds an item to the given list view at the given index
+     *
+     * @param listView the current list view which holds the row/cell
+     * @param index the index of the position to add the item
+     */
     private void addItem(ListView<String> listView, int index) {
         int groupIndex = getIndexViewByID(listView.getId());
-
-        if (groupIndex != 0) {
+        System.out.println("index: " + index);
+        if (groupIndex != -1) {
+            if (index == -1)
+                index = 0;
             groupsList.get(groupIndex).add(index, "Name");
             listView.refresh();
             listView.getSelectionModel().select(index);
@@ -210,59 +284,40 @@ public class GroupsController implements Initializable, ControllerInterface {
         }
     }
 
+    /**
+     * Sets the action event of the group menu button.
+     */
     private void setupGroupButton() {
-        groupBtnItem1.setOnAction(event1 -> showGroupList(0));
-        groupBtnItem2.setOnAction(event1 -> showGroupList(1));
-        groupBtnItem3.setOnAction(event1 -> showGroupList(2));
-        groupBtnItem4.setOnAction(event1 -> showGroupList(3));
-        groupBtnItem5.setOnAction(event1 -> showGroupList(4));
-        groupBtnItem6.setOnAction(event1 -> showGroupList(5));
+        groupBtnItem1.setOnAction(event1 -> showGroupList(1));
+        groupBtnItem2.setOnAction(event1 -> showGroupList(2));
+        groupBtnItem3.setOnAction(event1 -> showGroupList(3));
+        groupBtnItem4.setOnAction(event1 -> showGroupList(4));
+        groupBtnItem5.setOnAction(event1 -> showGroupList(5));
+        groupBtnItem6.setOnAction(event1 -> showGroupList(6));
     }
 
-    private void setupListViewProperties(ListView<String> listView, VBox vBox, Label label) {
-        label.setAlignment(Pos.CENTER);
-
-        vBox.nodeOrientationProperty().setValue(NodeOrientation.INHERIT);
-        vBox.setMinWidth(Region.USE_COMPUTED_SIZE);
-        vBox.setMinHeight(Region.USE_COMPUTED_SIZE);
-        vBox.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        vBox.setMaxHeight(Region.USE_COMPUTED_SIZE);
-        vBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        vBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(5);
-
-        listView.setEditable(true);
-        listView.nodeOrientationProperty().setValue(NodeOrientation.INHERIT);
-        listView.setMinWidth(Region.USE_COMPUTED_SIZE);
-        listView.setMinHeight(Region.USE_COMPUTED_SIZE);
-        listView.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        listView.setMaxHeight(Region.USE_COMPUTED_SIZE);
-        listView.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        listView.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
-        listView.setCellFactory(lv -> handleCellFactory(lv));
-
-        EventHandler<MouseEvent> mouseEventHandle = (MouseEvent event) -> {
-            handleMouseClicked(event);
-        };
-
-        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
-    }
-
+    /**
+     * Hides and shows the list views decided by count.
+     *
+     * @param count the number of list view which should be shown
+     */
     private void showGroupList(int count) {
-        if (groupCount == count || MAX_GROUP_COUNT == count)
+        if (groupCount == count || MAX_GROUP_COUNT < count)
             return;
 
         hBoxGroups.getChildren().clear();
-        hBoxGroups.getChildren().add(mainVBox);
-
         for (int iterator = 0; iterator < count; iterator++) {
             hBoxGroups.getChildren().add(vBoxList.get(iterator));
         }
         groupCount = count;
     }
 
+    /**
+     * Searches for the list view stored in the vBoxList and returns the index of it.
+     *
+     * @param id the String id of the list view which should be searched for
+     * @return the index of the list view stored in the vBoxList
+     */
     private int getIndexViewByID(String id) {
         ListIterator<VBox> vBoxListIterator = vBoxList.listIterator();
 
@@ -270,13 +325,15 @@ public class GroupsController implements Initializable, ControllerInterface {
             int index = vBoxListIterator.nextIndex();
             VBox vBox = vBoxListIterator.next();
             ListView<String> listView = (ListView<String>) vBox.getChildren().get(1);
-            System.out.println("getID: " + listView.getId());
             if (listView.getId().equals(id))
                 return index;
         }
-        return 0;
+        return -1;
     }
 
+    /**
+     * Overwritten {@link ListCell} class which handles the edit events.
+     */
     private class TeamListCell extends ListCell<String> {
         private final TextField textField = new TextField();
 
@@ -293,7 +350,8 @@ public class GroupsController implements Initializable, ControllerInterface {
             });
             textField.setOnAction(e -> {
                 int groupIndex = getIndexViewByID(listView.getId());
-                // Todo: Check here... there is something wrong ... i get the wrong listview and wrong group to the listview
+                if (groupIndex == -1)
+                    return;
                 groupsList.get(groupIndex).remove(getIndex());
                 groupsList.get(groupIndex).add(getIndex(), textField.getText());
                 setText(textField.getText());
@@ -335,6 +393,9 @@ public class GroupsController implements Initializable, ControllerInterface {
         }
     }
 
+    /**
+     * Provides the first list view with some example data
+     */
     private void exampleData() {
         ObservableList<String> group = FXCollections.observableArrayList(
                 new Team("1. Team").getName(),
@@ -347,12 +408,23 @@ public class GroupsController implements Initializable, ControllerInterface {
         groupList0.setItems(group);
     }
 
+    /**
+     * Shows the main stage again and closes the groupWindow stage
+     * Also sends a ok signal back to the main stage
+     *
+     * @param event {@link ActionEvent}
+     */
     @FXML
     void btnOkOnClicked(ActionEvent event) {
         Main.getStage().show();
         stage.close();
     }
 
+    /**
+     *
+     *
+     * @param event {@link ActionEvent}
+     */
     @FXML
     void btnAbortOnClick(ActionEvent event) {
         Main.getStage().show();
