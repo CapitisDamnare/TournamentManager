@@ -53,6 +53,12 @@ public class MainController implements Initializable {
     private ContextMenu contextMenu;
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
+    /**
+     * Setup of the tree view, table view and all Event- , Callback- handler.
+     *
+     * @param location {@link URL}
+     * @param resources {@link ResourceBundle}
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTreeView();

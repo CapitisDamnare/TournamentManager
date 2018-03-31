@@ -21,6 +21,10 @@ import tapsi.logic.Team;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * {@link GroupsController} is the controller of the groupsWindow.fxml.
+ * It handles all Visualization controls and sends and gets all information to the {@link ControllerInterface}.
+ */
 public class GroupsController implements Initializable, ControllerInterface {
 
     @FXML
@@ -61,6 +65,8 @@ public class GroupsController implements Initializable, ControllerInterface {
     private List<VBox> vBoxList;
     private List<ObservableList<String>> groupsList = new ArrayList<>();
 
+    private ListView<String> draggedListView;
+
     /**
      * Sets the Stage to the controller.
      * The controller is now able to hide and show the stage.
@@ -72,7 +78,7 @@ public class GroupsController implements Initializable, ControllerInterface {
     }
 
     /**
-     * Setup of the groupListView an all Event- , Callback- handler.
+     * Setup of the groupListView and all Event- , Callback- handler.
      *
      * @param location  {@link URL}
      * @param resources {@link ResourceBundle}
@@ -178,6 +184,7 @@ public class GroupsController implements Initializable, ControllerInterface {
                 cc.putString(cell.getText());
                 db.setContent(cc);
                 event.consume();
+                draggedListView = listView;
             }
         });
 
@@ -206,10 +213,15 @@ public class GroupsController implements Initializable, ControllerInterface {
 
         cell.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            if (db.hasString()) {
-                ObservableList<String> items = listView.getItems();
+            ListView<String> oldListView = listView;
+            if (db.hasString() && cell.getText() != null) {
+                if (!listView.getId().equals(draggedListView.getId())) {
+                    oldListView = draggedListView;
+                }
+
+                ObservableList<String> items = oldListView.getItems();
                 int draggedIndex = items.indexOf(db.getString());
-                String draggedPerson = listView.getItems().remove(draggedIndex);
+                String draggedPerson = oldListView.getItems().remove(draggedIndex);
 
                 int dropIndex = draggedIndex;
 
@@ -272,7 +284,6 @@ public class GroupsController implements Initializable, ControllerInterface {
      */
     private void addItem(ListView<String> listView, int index) {
         int groupIndex = getIndexViewByID(listView.getId());
-        System.out.println("index: " + index);
         if (groupIndex != -1) {
             if (index == -1)
                 index = 0;
@@ -309,6 +320,8 @@ public class GroupsController implements Initializable, ControllerInterface {
         for (int iterator = 0; iterator < count; iterator++) {
             hBoxGroups.getChildren().add(vBoxList.get(iterator));
         }
+        List<Integer> stageWidth = Arrays.asList(400,500,600,700,800,900);
+        stage.setWidth(stageWidth.get(hBoxGroups.getChildren().size()-1));
         groupCount = count;
     }
 
@@ -410,7 +423,7 @@ public class GroupsController implements Initializable, ControllerInterface {
 
     /**
      * Shows the main stage again and closes the groupWindow stage
-     * Also sends a ok signal back to the main stage
+     * Also sends an ok signal back to the main stage
      *
      * @param event {@link ActionEvent}
      */
@@ -421,7 +434,8 @@ public class GroupsController implements Initializable, ControllerInterface {
     }
 
     /**
-     *
+     * Shows the main stage again and closes the groupWindow stage
+     * Also sends an abort signal back to the main stage
      *
      * @param event {@link ActionEvent}
      */
@@ -431,6 +445,9 @@ public class GroupsController implements Initializable, ControllerInterface {
         stage.close();
     }
 
+    /**
+     * Shows the GroupSetttings stage and hides the main stage.
+     */
     @Override
     public void onBtnGroupSettings() {
         stage.show();

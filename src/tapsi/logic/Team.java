@@ -1,7 +1,5 @@
 package tapsi.logic;
 
-import java.util.List;
-
 public class Team {
 
     private String name;
