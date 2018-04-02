@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="137.0" prefWidth="256.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tapsi.views.NewTournamentWindow">
+   <children>
+      <VBox alignment="CENTER" layoutX="78.0" layoutY="-48.0" prefHeight="152.0" prefWidth="256.0" style="-fx-background-color: green;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" text="Label" />
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+               <children>
+                  <TextField alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0" style="-fx-background-color: red;" VBox.vgrow="SOMETIMES">
+               <children>
+                  <Button mnemonicParsing="false" text="OK" />
+                  <Button mnemonicParsing="false" text="Abbrechen" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
